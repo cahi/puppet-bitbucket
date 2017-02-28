@@ -1,5 +1,7 @@
 # == Class bitbucket::config
 #
+# This class is called from bitbucket for configuration.
+#
 class bitbucket::config {
 
   # server.xml
@@ -11,21 +13,8 @@ class bitbucket::config {
     mode    => '0640',
   }
 
-#  if versioncmp($::augeasversion, '1.0.0') < 0 {
-#    fail('This module requires Augeas >= 1.0.0')
-#  }
-#
-#  $path = "Server/Service[#attribute/name='Tomcat-Standalone']"
-#
-#  if ! empty($parameters) {
-#    $tomcat_parameters = suffix(prefix(join_keys_to_values($::bitbucket::tomcat_parameters, " '"), "set ${path}/Connector/#attribute/"), "'")
-#  } else {
-#    $tomcat_parameters = undef
-#  }
-#
-
   # setenv.sh settings
-  file_line {'java_home':
+  file_line {'bitbucket_java_home':
     ensure => present,
     path   => "${::bitbucket::webappdir}/bin/setenv.sh",
     line   => "  export JAVA_HOME=${::bitbucket::javahome}",
@@ -46,7 +35,7 @@ class bitbucket::config {
     match  => '^# umask 0027$',
   }
 
-  ini_setting { 'jvm_minimum_memory':
+  ini_setting { 'bitbucket_jvm_minimum_memory':
     ensure  => present,
     path    => "${::bitbucket::webappdir}/bin/setenv.sh",
     section => '',
@@ -54,7 +43,7 @@ class bitbucket::config {
     value   => $::bitbucket::jvm_minimum_memory,
   }
 
-  ini_setting { 'jvm_maximum_memory':
+  ini_setting { 'bitbucket_jvm_maximum_memory':
     ensure  => present,
     path    => "${::bitbucket::webappdir}/bin/setenv.sh",
     section => '',

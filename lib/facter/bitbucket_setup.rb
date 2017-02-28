@@ -1,6 +1,8 @@
 path = '/var/tmp/.bitbucket.yaml'
 y = YAML.load_file(path) if File.exist? path
 
+facter lib/facter/util/file_read.rb
+
 # Fact to work around PUP-1125 requirement.
 Facter.add(:bitbucket_setup) do
   setcode do
